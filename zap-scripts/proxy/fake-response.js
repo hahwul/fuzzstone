@@ -1,6 +1,6 @@
 var patternUrl = "https://www.hahwul.com/zzz"
-var resHeaders = "HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=UTF-8"
-var resBody = "<h1>Fake</h1>"
+var resHeaders = "HTTP/1.1 200 OK\r\nContent-Type: application/json; charset=UTF-8"
+var resBody = '{"msg":"success"}'
 
 function proxyRequest(msg) {
 	if (msg.getRequestHeader().getURI().toString().equals(patternUrl)) {
