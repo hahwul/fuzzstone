@@ -3,7 +3,7 @@ function getRequiredParamsNames(){
 }
 
 function getOptionalParamsNames(){
-	return ["statusCode","regex"];
+	return ["statusCode","regex","lengthBody","lengthHeader"];
 }
 
 function processMessage(utils, message) {
@@ -18,12 +18,11 @@ function processResult(utils, fuzzResult){
 		var matchPattern = new RegExp(params.regex);
 		var fuzzedResponseHeader = fuzzed.getResponseHeader().toString();
 		var fuzzedResponseBody = fuzzed.getResponseBody().toString();
-	  var regexHeaderFound = fuzzedResponseHeader.search(matchPattern) != -1;
-	  var regexBodyFound = fuzzedResponseBody.search(matchPattern) != -1;
-		
-    if(regexHeaderFound || regexBodyFound) {
+	        var regexHeaderFound = fuzzedResponseHeader.search(matchPattern) != -1;
+	        var regexBodyFound = fuzzedResponseBody.search(matchPattern) != -1;
+		if(regexHeaderFound || regexBodyFound) {
 			return true;
-	  }
+	     }
 	}
 
 	if(params.statusCode != "") {
@@ -31,7 +30,27 @@ function processResult(utils, fuzzResult){
 		var fuzzedStatusCode = fuzzed.getResponseHeader().getStatusCode().toString();
 		if(fuzzedStatusCode == matchStatusCode) {
 			return true;
-	  }
+	     }
 	}
+	
+	if(params.lengthBody != "") {
+		var matchBodySize = params.lengthBody;
+		var fuzzedBodySize = (fuzzed.getResponseBody().toString()).length()
+		if(parseInt(matchBodySize) == fuzzedBodySize) {
+			return true;
+	     }
+	}
+
+	if(params.lengthHeader != "") {
+		var matchHeaderSize = params.lengthHeader;
+		var fuzzedHeaderSize = (fuzzed.getResponseHeader().toString()).length()
+		if(parseInt(matchHeaderSize) == fuzzedHeaderSize) {
+			return true;
+	     }
+	}
+
 	return false;
 }
+
+
+
