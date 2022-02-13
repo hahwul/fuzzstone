@@ -1,8 +1,8 @@
 // https://www.hahwul.com/2021/09/11/zap-fuzzer-and-scripting/#fuzz-with-cache-busting
 
 function processMessage(utils, message) {
-	var cbValue = "cbvalue"+Math.floor(Math.random() * 254)
-     var updatedUrlParams = setCacheBusting(message,cbValue);
+	var cbValue = Math.floor(Math.random() * 10000)
+        setCacheBusting(message,cbValue);
 	message.getRequestHeader().setHeader("X-Cache-Busting", cbValue);
 }
 
@@ -12,22 +12,12 @@ function setCacheBusting(message,cbValue) {
     var iterator = params.iterator();
 
     if(iterator.hasNext()) {
-      var uri = message.getRequestHeader().getURI().toString() + "&cbvalue="+cbValue
+      var uri = message.getRequestHeader().getURI().toString() + "&x_cache_busting_"+cbValue+"="+cbValue
 	 message.getRequestHeader().setURI(new URI(uri, false))
     } else {
-      var uri = message.getRequestHeader().getURI().toString() + "?cbvalue="+cbValue
+      var uri = message.getRequestHeader().getURI().toString() + "?x_cache_busting_"+cbValue+"="+cbValue
 	 message.getRequestHeader().setURI(new URI(uri, false))
     }
-	
-
-
-    while(iterator.hasNext()) {
-        var param = iterator.next();
-        if (param.getName().equals("cachebusting")) {
-		param.setValue(cbValue)
-        }
-    }
-    return params;
 }
 
 function processResult(utils, fuzzResult){
