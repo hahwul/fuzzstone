@@ -12,8 +12,8 @@ function scan(ps, msg, src) {
     var contentType = msg.getResponseHeader().getHeader("Content-Type")
     var unwantedFileTypes = ['image/png', 'image/jpeg','image/gif','application/x-shockwave-flash','application/pdf']
     var patterns = [
-      /(location|href|innerHTML)(|\s)=(|\s)window\..*/gi,
-      /(eval\(|html\(|constructor\(|setInterval\(|setTimeout\()(|\s)window\..*/gi
+      /(location|\.href|\.innerHTML|\.outerHTML|document.URL|\.srcdoc)(|\s)=(|\s)window\..*/gi,
+      /(eval\(|html\(|constructor\(|setInterval\(|setTimeout\(|document.write\(|document.execCommand\()(|\s)window\..*/gi
     ]
 
     if (unwantedFileTypes.indexOf(""+contentType) >= 0) {
